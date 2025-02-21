@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보수정</title>
+    <link rel="stylesheet" href="Edit_memberinfo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+   
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_logo">
+            <a href="URL">
+                <img src="images/rootair.jpg"/>
+            </a>
+        </div>
+        <ul class="navbar_menu">
+            <li><a href="">예약</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="">문의사항</a></li>
+        </ul>
+        <ul class="navbar_member">
+            <li class="navbar_signup"><a href="">회원가입</a></li>
+            <li class="navbar_login"><a href="">로그인</a></li>
+        </ul>
+        <img class="navbar_togglebtn" src="images/topbar.jpg" width="24" height="18"/>
+    </nav>
+
+    <div class="container">
+        <label for="Edit_memberinfo">회원정보수정</label>
+        <form id="Edit_memberinfoForm" class="Edit_memberinfo-form-container">
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" placeholder=" 이름을 불러와 입력됨" readonly>
+            </div>
+            <div class="input-group">
+                <label for="id">아이디</label>
+                <input type="text" id="userId" name="id" placeholder=" 아이디를 불러와 자동 입력" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="password">새로운 비밀번호</label>
+                <input type="password" id="password" name="password" placeholder=" 비밀번호 변경하시려면 입력" required>
+                <span id="passwordError" style="color: red; display: none;">비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자로 설정해야 합니다.</span>
+            </div>
+            <div class="input-group">
+                <label for="confirm_password">새로운 비밀번호 확인</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder=" 비밀번호 변경 확인" required>
+                <span id="confirmPasswordError" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</span>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" name="phone" placeholder=" 전화번호를 불러와 자동 입력" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="postcode">우편번호</label>
+                <div class="check_container">
+                    <input type="text" id="postcode" name="postcode" placeholder=" 기존 우편번호를 표시" readonly>
+                    <button type="button" id="findAddressBtn">찾기</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="address">주소</label>
+                <input type="text" id="address" name="address" placeholder=" 기존 주소를 표시" readonly required>
+            </div>
+            <div class="input-group">
+                <label for="extra_address">상세 주소</label>
+                <input type="text" id="extra_address" name="extra_address" placeholder=" 기존 상세 주소 표시" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">이메일</label>
+                <input type="text" id="email" name="email" placeholder=" 이메일 인증 후 자동 입력" readonly>
+            </div>
+
+            <button type="button" id="updateBtn">수정</button>
+        </form>
+        </div>
+    </div>
+    <script src="Edit_memberinfo.js"></script>
+</body>
+
+</html>

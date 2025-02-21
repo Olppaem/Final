@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> 
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_logo">
+            <a href="URL">
+                <img src="images/rootair.jpg"/>
+            </a>
+        </div>
+        <ul class="navbar_menu">
+            <li><a href="">예약</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="">문의사항</a></li>
+        </ul>
+        <ul class="navbar_member">
+            <li class="navbar_signup"><a href="">회원가입</a></li>
+            <li class="navbar_login"><a href="">로그인</a></li>
+        </ul>
+        <img class="navbar_togglebtn" src="images/topbar.jpg" width="24" height="18"/>
+    </nav>
+</body>
+        </div>
+    </header>
+    
+
+    <div class="container">
+        <label for="signup">회원가입</label>
+        <form id="signupForm" class="signup-form-container">
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" placeholder=" 이름을 입력하세요" required>
+                <span id="nameError" style="color: red; display: none;">이름은 최소 2자 이상 입력해야 합니다.</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="id">아이디</label>
+                <div class="check_container">
+                    <input type="text" id="userId" name="id" placeholder=" 아이디를 입력하세요" required>
+                    <button type="button" id="checkIdBtn">중복 체크</button>
+                </div>
+                <span id="userIdCheckError" style="color: red; display: none;">아이디 중복 확인을 해주세요.</span>
+            </div>
+        
+            <div class="input-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder=" 비밀번호 입력" required>
+                <span id="passwordError" style="color: red; display: none;">비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자로 설정해야 합니다.</span>
+            </div>
+            
+        
+            <div class="input-group">
+                <label for="confirm_password">비밀번호 확인</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder=" 비밀번호 확인" required>
+                <span id="confirmPasswordError" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</span>
+            </div>
+            
+        
+            <div class="input-group">
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" name="phone" placeholder=" 01012345678" required>
+                <span id="phoneError" style="color: red; display: none;">전화번호 형식이 올바르지 않습니다.</span>
+            </div>
+        
+            <div class="input-group">
+                <label for="postcode">우편번호</label>
+                <div class="check_container">
+                    <input type="text" id="postcode" name="postcode" placeholder=" 우편번호" readonly>
+                    <button type="button" id="findAddressBtn">찾기</button>
+                </div>
+            </div>
+        
+            <div class="input-group">
+                <label for="address">주소</label>
+                <input type="text" id="address" name="address" placeholder=" 주소 입력" readonly required>
+            </div>
+        
+            <div class="input-group">
+                <label for="extra_address">상세 주소</label>
+                <input type="text" id="extra_address" name="extra_address" placeholder=" 상세 주소 입력" required>
+            </div>
+        
+            <div class="input-group">
+                <label for="email">이메일</label>
+                <input type="text" id="email" name="email" placeholder=" 이메일 인증 후 자동 입력" readonly>
+            </div>
+        
+            <button type="submit">가입</button>
+        </form>
+        
+        
+        </section>
+    </div>
+    <script src="signup.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="header.js" defer></script>
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_logo">
+            <a href="URL">
+                <img src="images/rootair.jpg"/>
+            </a>
+        </div>
+        <ul class="navbar_menu">
+            <li><a href="">예약</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="">문의사항</a></li>
+        </ul>
+        <ul class="navbar_member">
+            <li class="navbar_signup"><a href="">회원가입</a></li>
+            <li class="navbar_login"><a href="">로그인</a></li>
+        </ul>
+        <img class="navbar_togglebtn" src="images/topbar.jpg" width="24" height="18"/>
+    </nav>
+
+    <div class="login_page_wrapper">
+    <header id="LoginType" class="login_wrap"></header>
+    <div class="login-page" >
+        
+        <div class="login-input">
+
+            <form method="post" action="실제로 데이터를 처리할 서버의 URL" id="login-form">
+                <div class="userID">
+                    <input type="text" name="userID" placeholder="아이디">
+                </div>
+                <div class="password">
+                    <input type="password" name="password" placeholder="비밀번호">
+                </div>
+                <div class="logininput">
+                    <button type="submit">로그인</button>
+                </div>
+            </form>
+        </div>
+        <div class="bottombox">
+            <a class="find-pw" href="#">비밀번호찾기</a>
+            <a class="sign-on" href="#">회원가입</a>
+        </div>
+    </div>
+    </div>
+</body>
+
+
+
+</html>

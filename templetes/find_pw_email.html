@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 찾기 이메일 인증</title>
+    <link rel="stylesheet" href="find_passwd.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="find_passwd.js" defer></script>
+   
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_logo">
+            <a href="URL">
+                <img src="images/rootair.jpg"/>
+            </a>
+        </div>
+        <ul class="navbar_menu">
+            <li><a href="">예약</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="">문의사항</a></li>
+        </ul>
+        <ul class="navbar_member">
+            <li class="navbar_signup"><a href="">회원가입</a></li>
+            <li class="navbar_login"><a href="">로그인</a></li>
+        </ul>
+        <img class="navbar_togglebtn" src="images/topbar.jpg" width="24" height="18"/>
+    </nav>
+    <div class="find_passwd_page">
+        <div class="find_passwd_box">
+            <!-- 이메일을 동적으로 표시할 부분 -->
+            <label for="find_passwd_label" id="email_label">
+                <p>이메일로 인증번호를 보냈습니다.<br>인증번호를 입력해주세요.</p>
+            </label>
+            <form method="post" action="실제로 데이터를 처리할 서버의 URL" id="find_pw_emailcode-form">
+                
+                <div class="find_pw_code">
+                    <input type="text" name="code" placeholder="인증번호를 입력해주세요">
+                    <button type="submit">다음</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+</html>
