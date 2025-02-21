@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>게시글 상세</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+
+    <!-- 📌 첨부 파일 표시 -->
+    {% if post.file_path %}
+        <h3>첨부 파일:</h3>
+        {% if post.file_path.lower().endswith(('png', 'jpg', 'jpeg', 'gif')) %}
+            <img src="{{ url_for('posts.uploaded_file', filename=post.file_path.split('/')[-1]) }}" alt="첨부 이미지" width="300">
+        {% else %}
+            <a href="{{ url_for('posts.uploaded_file', filename=post.file_path.split('/')[-1]) }}" download>파일 다운로드</a>
+        {% endif %}
+    {% endif %}
+
+    <hr>
+
+    <!-- 📌 댓글 입력 폼
+    <h3>댓글 작성</h3>
+    <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
+        <textarea name="content" required></textarea>
+        <br>
+        <button type="submit">댓글 추가</button>
+    </form>
+
+    <hr>
+
+     📌 댓글 목록 표시 
+    <h3>댓글</h3>
+    {% for comment in comments %}
+        <p>{{ comment.content }} <small>({{ comment.created_at }})</small></p>
+        <hr>
+    {% else %}
+        <p>댓글이 없습니다.</p>
+    {% endfor %} -->
+
+    
+</body>
+</html>
