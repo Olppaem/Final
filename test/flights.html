@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>항공권 목록</title>
+</head>
+<body>
+    <h2>예약 가능한 항공편</h2>
+    <table border="1">
+        <tr>
+            <th>항공기</th>
+            <th>출발 공항</th>
+            <th>도착 공항</th>
+            <th>출발 시간</th>
+            <th>도착 시간</th>
+            <th>소요 시간</th>
+            <th>가격</th>
+            <th>좌석 등급</th>
+            <th>탑승객 수</th>
+            <th>예약</th>
+        </tr>
+        {% for flight in flights %}
+        <tr>
+            <td>{{ flight.airplane_name }}</td>
+            <td>{{ flight.departure_airport }}</td>
+            <td>{{ flight.arrival_airport }}</td>
+            <td>{{ flight.departure_time }}</td>
+            <td>{{ flight.arrival_time }}</td>
+            <td>{{ flight.duration }}</td>
+            <td>{{ flight.price }} 원</td>
+            <td>
+                <select name="seat_class_{{ flight.flight_id }}" id="seat_class_{{ flight.flight_id }}">
+                    <option value="Economy">Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First Class">First Class</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" id="passenger_count_{{ flight.flight_id }}" name="passenger_count_{{ flight.flight_id }}" value="1" min="1">
+            </td>
+            <td>
+                <button onclick="redirectToOrder('{{ flight.flight_id }}')">예약하기</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        function redirectToOrder(flight_id) {
+            let seatClassElement = document.getElementById("seat_class_" + flight_id);
+            let passengerCountElement = document.getElementById("passenger_count_" + flight_id);
+
+            if (!seatClassElement || !passengerCountElement) {
+                alert("오류 발생: 좌석 등급 또는 탑승객 수를 선택할 수 없습니다.");
+                return;
+            }
+
+            let seat_class = seatClassElement.value;
+            let passenger_count = passengerCountElement.value;
+
+            window.location.href = "/detail?flight_id=" + flight_id + "&seat_class=" + seat_class + "&passenger_count=" + passenger_count;
+        }
+    </script>
+</body>
+</html>

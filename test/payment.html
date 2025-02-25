@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 정보 입력</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 50px auto;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .checkbox-container {
+            margin-bottom: 10px;
+        }
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 8px;
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>결제 정보 입력</h2>
+
+    <!-- 이메일 입력 -->
+    <div class="info-box">
+        <label for="email">이메일:</label>
+        <input type="email" id="email" name="email" required placeholder="이메일을 입력하세요">
+        <button type="button" onclick="checkEmail()">확인</button>
+    </div>
+
+    <!-- 마일리지 정보 -->
+    <div class="info-box" id="mileage-info" style="display:none;">
+        <strong>보유 마일리지: <span id="mileage">0</span> 원</strong><br>
+
+        <label class="checkbox-container">
+            <input type="checkbox" id="use_mileage"> 마일리지 사용
+        </label>
+
+        <!-- 마일리지 입력란 (초기에는 숨김) -->
+        <div id="mileage_input_container" style="display:none;">
+            <label>사용할 마일리지: </label>
+            <input type="number" id="mileage_input" name="mileage_used" value="0" min="0" step="100">
+            <span id="mileage_warning" style="color: red; display: none;">사용할 수 있는 마일리지를 초과하였습니다!</span>
+        </div>
+    </div>
+
+    <!-- 최종 결제 금액 (초기 상태에서 표시) -->
+    <div class="info-box">
+        <strong>최종 결제 금액: <span id="final_price">{{ total_price }}</span> 원</strong>
+    </div>
+
+    <!-- 결제 정보 전송 폼 -->
+    <form id="paymentForm" action="/process_payment" method="POST">
+        <input type="hidden" name="username" value="{{ passenger_username }}">
+        <input type="hidden" name="eng_name" value="{{ passenger_eng_name }}">
+        <input type="hidden" name="airplan_name" value="{{ airplan_name }}">
+        <input type="hidden" name="seat_class" value="{{ seat_class }}">
+        <input type="hidden" name="passenger_count" value="{{ passenger_count }}">
+        <input type="hidden" name="total_price" id="total_price" value="{{ total_price }}">
+        <input type="hidden" name="email" id="email_field">
+
+        <button type="button" onclick="openPaymentInfo()">결제 진행</button>
+    </form>
+
+    <script>
+        function openPaymentInfo() {
+            let form = document.getElementById("paymentForm");
+            let email = document.getElementById("email").value.trim();
+
+            if (!email) {
+                alert("이메일을 입력해주세요.");
+                return;
+            }
+
+            if (!form) {
+                console.error("ERROR: 결제 폼을 찾을 수 없습니다.");
+                alert("결제 정보를 찾을 수 없습니다.");
+                return;
+            }
+
+            let formData = new URLSearchParams(new FormData(form)).toString();
+            let url = `/payment_info?${formData}`;
+
+            let paymentWindow = window.open(url, "PaymentWindow", "width=500,height=600");
+
+            if (!paymentWindow) {
+                alert("팝업 차단이 감지되었습니다. 팝업 차단을 해제하고 다시 시도하세요.");
+            }
+
+            // 결제 창이 닫힌 후 부모 창에서 결과 페이지로 리디렉션
+            let timer = setInterval(() => {
+                if (paymentWindow.closed) {
+                    clearInterval(timer);
+                    window.location.href = "/result";
+                }
+            }, 500);
+        }
+
+// ✅ 전역 함수로 등록하여 onclick에서 호출 가능하도록 설정
+window.openPaymentInfo = openPaymentInfo;
+
+
+
+        function checkEmail() {
+            let email = document.getElementById("email").value.trim();
+
+            if (!email) {
+                alert("이메일을 입력해주세요.");
+                return;
+            }
+
+            console.log(`DEBUG: Checking mileage for email = ${email}`);
+
+            fetch(`/check_mileage?email=${encodeURIComponent(email)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            return response.json().then(data => {
+                                throw new Error(data.error || "해당 이메일로 등록된 사용자가 없습니다.");
+                            });
+                        }
+                        throw new Error(`HTTP 오류 발생! 상태 코드: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || typeof data.mileage === "undefined") {
+                        throw new Error("서버에서 잘못된 응답을 받았습니다.");
+                    }
+
+                    document.getElementById("email_field").value = email;
+                    document.getElementById("mileage").innerText = data.mileage;
+                    document.getElementById("mileage-info").style.display = "block";
+                })
+                .catch(error => {
+                    console.error("ERROR: ", error);
+                    alert(error.message);
+                });
+        }
+
+        // 마일리지 사용 체크박스 선택 시 입력 필드 표시
+        document.getElementById("use_mileage").addEventListener("change", function () {
+            let mileageInputContainer = document.getElementById("mileage_input_container");
+
+            if (this.checked) {
+                mileageInputContainer.style.display = "block";
+            } else {
+                mileageInputContainer.style.display = "none";
+                document.getElementById("mileage_input").value = "0";
+            }
+
+            finalizeMileageUsage();
+        });
+
+        // 마일리지 입력 후 최종 결제 금액 조정 (초과 사용 방지)
+        function finalizeMileageUsage() {
+            let totalPriceElem = document.getElementById("final_price");
+            let totalPriceInput = document.getElementById("total_price");
+            let mileageElem = document.getElementById("mileage");
+            let mileageInput = document.getElementById("mileage_input");
+            let mileageWarning = document.getElementById("mileage_warning");
+            let useMileageCheckbox = document.getElementById("use_mileage");
+
+            let originalPrice = parseInt(totalPriceInput.value);
+            let mileage = parseInt(mileageElem.innerText);
+            let usedMileage = parseInt(mileageInput.value);
+
+            if (!useMileageCheckbox.checked) {
+                usedMileage = 0;
+            }
+
+            if (usedMileage > mileage) {
+                usedMileage = mileage;
+                mileageInput.value = usedMileage;
+                mileageWarning.style.display = "inline";
+            } else {
+                mileageWarning.style.display = "none";
+            }
+
+            let discountedPrice = Math.max(originalPrice - usedMileage, 0);
+            totalPriceElem.innerText = discountedPrice.toLocaleString();
+            totalPriceInput.value = discountedPrice;
+        }
+
+        document.getElementById("mileage_input").addEventListener("blur", finalizeMileageUsage);
+        document.getElementById("mileage_input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                finalizeMileageUsage();
+            }
+        });
+    </script>
+</body>
+</html>
