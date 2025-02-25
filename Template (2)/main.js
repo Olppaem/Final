@@ -39,11 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const confirmButton = document.getElementById('calendarConfirmBtn');
 
+    const searchButton = document.getElementById('quickbookingOnSearch');
+
     let count = 1;
     let isSelectingDeparture = true;
     let currentDate = new Date();
     let departureDate = null;
     let arrivalDate = null;
+    
+    if (searchButton) {
+        searchButton.onclick = () => {
+            window.location.href = '/main/list';
+        };
+    }
 
     seatClassBtn.addEventListener('click', () => {
         seatClassModal.classList.add('show');
@@ -251,4 +259,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderCalendars();
+    
 });
