@@ -9,10 +9,15 @@ def get_db_connection():
         database='mydatabase',
         charset='utf8mb4',
         use_unicode=True,
+        port=3307,  # ✅ 명확하게 포트 설정
         cursorclass=pymysql.cursors.DictCursor
+        
     )
 
 # 📌 파일 업로드 허용 확장자 검사
 # def allowed_file(filename):
 #     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
 #     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
