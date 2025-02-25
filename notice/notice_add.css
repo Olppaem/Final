@@ -1,0 +1,237 @@
+body {
+    margin:0;
+    font-family: "Noto Sans KR";
+    font-weight: 400;
+    font-style: normal;
+}
+em {
+    font-style: normal;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ccc;
+}
+.navbar_logo{
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar_logo img {
+    margin-left: 150px;
+    width: 210px;
+    height: auto;
+}
+.navbar_menu {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    font-size: 27px;
+    font-weight: 500;
+    gap: 100px;
+}
+.navbar_menu li {
+    padding: 8px 20px;
+}
+.navbar_menu li:hover {
+    background-color: #e3dede;
+    border-radius: 10px;
+}
+
+.navbar_member {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+}
+.navbar_member li {
+    padding: 8px 14px;
+}
+.navbar_member li:hover {
+    background-color: #e3dede;
+    border-radius: 10px;
+}
+.navbar_signup {
+    margin-top: 13px;
+    margin-right: 10px;
+}
+.navbar_login {
+    font-size: 20px;
+    margin-top: 8px;
+    margin-right: 50px;
+    font-weight: 500;
+    border: 2px solid #000;
+    border-radius: 10px;
+}
+.navbar_togglebtn {
+    display: none;
+    position:absolute;
+    top: 32px;
+    right: 32px;
+    font-size: 24px; 
+}
+
+@media screen and (max-width: 1040px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar_menu {
+        font-size:16px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0px
+    }
+    .navbar_menu li {
+        width: 100%;
+        text-align: center;
+    }
+    .navbar_member {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .navbar_member li {
+        width: 100%;
+        text-align: center;
+    }
+    .navbar_togglebtn {
+        display: block;
+    }
+    .navbar_menu.active,
+    .navbar_member.active {
+        display: flex;
+    }
+    .navbar_signup {
+        margin-left: 10px;
+    }
+    .navbar_login {
+        margin-left: 50px;
+        font-size:16px;
+        border: none;
+        border-radius: none;
+    }
+}
+/* ========== 게시글 작성 폼 ========== */
+.write_container {
+    width: 100%;
+    max-width: 1500px; /* 폼을 넓히면서 가독성을 유지 */
+    margin: 50px auto;
+    padding: 50px; /* 내부 여백 */
+    background: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* 제목 스타일 */
+h2 {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* 입력 필드 & 라벨 스타일 */
+label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+    font-size: 18px; /* 크기 확대 */
+}
+
+input, textarea {
+    width: 100%;
+    max-width: 1400px; /* 입력 필드가 너무 길지 않게 제한 */
+    padding: 14px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px; /* 입력 필드 간격 */
+}
+
+/* 파일 첨부 스타일 */
+input[type="file"] {
+    padding: 10px;
+}
+
+/* 텍스트 영역 스타일 (내용 입력) */
+textarea {
+    height: 200px;
+    resize: vertical;
+}
+/* 비밀글 체크박스 & 버튼을 한 줄로 정렬 */
+.post-options {
+    display: flex;
+    align-items: center; /* 요소들을 같은 높이로 정렬 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 15px; /* 요소 사이 간격 */
+    margin-top: 20px;
+    white-space: nowrap; /* 줄 바꿈 방지 */
+}
+
+/* 비밀글 체크박스 + 라벨 그룹 */
+.secret-group {
+    display: flex;
+    align-items: center; /* 체크박스와 라벨을 같은 높이에 정렬 */
+    gap: 10px; /* 체크박스와 라벨 사이 간격 */
+}
+
+/* 체크박스 스타일 (높이 문제 해결) */
+input[name="secret"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    vertical-align: middle; /* 체크박스를 글자와 같은 높이에 정렬 */
+    position: relative;
+    top: 8px; 
+    /* 미세 조정: 필요하면 2px 또는 -1px 등으로 변경 */
+}
+
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼 간격 */
+}
+
+/* 버튼 스타일 */
+.button-group button {
+    background: black;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
+    white-space: nowrap; /* 버튼 내부 텍스트 줄 바꿈 방지 */
+}
+
+/* 버튼 hover 효과 */
+.button-group button:hover {
+    background: #333;
+}
+
+/* 삭제 버튼만 빨간색 */
+#deleteBtn {
+    background-color: rgb(255, 0, 0); /* 배경색 빨강 */
+    color: white; /* 글자색 흰색 */
+}
+
+/* 삭제 버튼 hover 효과 */
+#deleteBtn:hover {
+    background-color: darkred; /* 더 진한 빨강 */
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 50px auto;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #007bff;
+        }
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        strong {
+            color: #495057;
+        }
+        .info-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #f1f3f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>예약 정보 확인</h2>
+    
+    <div class="info-box">
+        <p><strong>항공편:</strong> {{ flight.airplane_name }}</p>
+        <p><strong>출발 공항:</strong> {{ flight.departure_airport }}</p>
+        <p><strong>도착 공항:</strong> {{ flight.arrival_airport }}</p>
+        <p><strong>출발 시간:</strong> {{ flight.departure_time }}</p>
+        <p><strong>도착 시간:</strong> {{ flight.arrival_time }}</p>
+        <p><strong>좌석 등급:</strong> {{ seat_class }}</p>
+        <p><strong>탑승객 수:</strong> {{ passenger_count }}</p>
+        <p><strong>총 결제 금액:</strong> {{ flight.price * passenger_count }} 원</p>
+    </div>
+
+    <h3>예약자 정보 입력</h3>
+    <form action="/payment" method="POST">
+        <label>예약자 이름:</label>
+        <input type="text" name="username" placeholder="홍길동" required>
+
+        <label>영문 이름:</label>
+        <input type="text" name="eng_name" placeholder="Hong Gil-dong" required>
+
+        <label>항공편명:</label>
+        <input type="text" name="airplan_name" value="{{ flight.airplane_name }}" readonly>
+
+        <input type="hidden" name="flight_id" value="{{ flight.flight_id }}">
+        <input type="hidden" name="seat_class" value="{{ seat_class }}">
+        <input type="hidden" name="passenger_count" value="{{ passenger_count }}">
+
+        <button type="submit">결제 진행</button>
+    </form>
+</body>
+</html>

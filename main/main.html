@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_logo">
+            <a href="URL">
+                <img src="../header/rootair.jpg"/>
+            </a>
+        </div>
+        <ul class="navbar_menu">
+            <li><a href="">예약</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="">문의사항</a></li>
+        </ul>
+        <ul class="navbar_member">
+            <li class="navbar_signup"><a href="">회원가입</a></li>
+            <li class="navbar_login"><a href="">로그인</a></li>
+        </ul>
+        <img class="navbar_togglebtn" src="../header/topbar.jpg" width="24" height="18"/>
+    </nav>
+    <div class="main_wrap">
+        <img src="airplane.jpg" alt="비행기 이미지">
+        <div class="main_text_wrap">
+            <h1>Root <em>Air</em></h1>
+            <h2>하늘을 더 가깝게, 여행을 더 편하게</h2>
+            <div class="main_container">
+                <h3 class="search_title">여정_1</h3>
+                <div class="search_btn_wrap">
+                    <button class="search_btn">+</button>
+                    <div class="main_inner_btn"><a href="URL">조회</a></div> 
+                </div>
+                <table class="search_table">
+                    <tr>
+                        <td>출발지</td>
+                        <td>도착지</td>
+                        <td>출발날짜</td>
+                        <td>인원</td>
+                        <td>좌석등급</td>
+                    </tr>
+                </table>
+                <table class="search_table_input">
+                    <tr>
+                        <td>
+                            <select name="airplane_departure">
+                                <option value="">출발지</option>
+                                <option value="인천">인천</option>
+                                <option value="김포">김포</option>
+                                <option value="김해">김해</option>
+                                <option value="도쿄">도쿄</option>
+                                <option value="마드리드">마드리드</option>
+                                <option value="뉴욕">뉴욕</option>
+                                <option value="워싱턴">워싱턴</option>
+                                <option value="런던">런던</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="airplane_arrival">
+                                <option value="">도착지</option>
+                                <option value="인천">인천</option>
+                                <option value="김포">김포</option>
+                                <option value="김해">김해</option>
+                                <option value="도쿄">도쿄</option>
+                                <option value="마드리드">마드리드</option>
+                                <option value="뉴욕">뉴욕</option>
+                                <option value="워싱턴">워싱턴</option>
+                                <option value="런던">런던</option>
+                            </select>
+                        </td>
+                        <td><input type="date"></td>
+                        <td>
+                            <select name="airplane_count">
+                                <option value="">인원</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="airplane_class">
+                                <option value="">좌석등급</option>
+                                <option value="economy">economy</option>
+                                <option value="business">business</option>
+                                <option value="first">first</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>  
+            </div>
+        </div>    
+    </div>
+</body>
+</html>
+
