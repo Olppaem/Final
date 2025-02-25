@@ -1,9 +1,8 @@
 from flask import Flask
 from blueprints import blueprints  # `__init__.py`에서 가져옴
 
-
-
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '1234'
 
 # 🔹 Blueprint 등록
 for bp in blueprints:
