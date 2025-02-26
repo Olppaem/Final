@@ -52,7 +52,7 @@ def send_email_smtp(to_email, subject, message):
 # ✅ HTML 페이지 렌더링
 @pwfind_bp.route('/forgot_password')
 def forgot_password():
-    return render_template('member/find/forgot_password.html')
+    return render_template('member/forgot_password.html')
 
 # step 1
 @pwfind_bp.route('/request-reset-code', methods=['POST'])
@@ -364,7 +364,7 @@ def reset_password():
 # ✅ HTML 페이지 렌더링
 @pwfind_bp.route('/forgot_password')
 def forgot_password():
-    return render_template('member/find/forgot_password.html')
+    return render_template('member/forgot_password.html')
 
 
 # Step 1: 아이디 입력 후 인증 코드 요청

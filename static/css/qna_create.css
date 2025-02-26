@@ -166,13 +166,14 @@ textarea {
     align-items: center;
     justify-content: flex-start;
     margin-top: 10px;
+    margin-left: 900px;
 }
 
 .checkbox_container label {
     margin-left: 5px;
 }
 
-.submit_btn {
+#submit_btn {
     background-color: #222;
     color: white;
     padding: 10px 15px;
@@ -183,6 +184,6 @@ textarea {
     margin-top: 15px;
 }
 
-.submit_btn:hover {
+#submit_btn:hover {
     background-color: #111;
 }
