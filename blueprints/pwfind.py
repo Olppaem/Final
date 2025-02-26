@@ -51,6 +51,7 @@ def send_email_smtp(to_email, subject, message):
 
 # ✅ HTML 페이지 렌더링
 @pwfind_bp.route('/forgot_password')
+
 def forgot_password():
     return render_template('member/forgot_password.html')
 

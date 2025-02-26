@@ -1,6 +1,7 @@
-import os
 from flask import Blueprint, render_template, request, redirect, url_for,jsonify,send_from_directory
+import os
 from blueprints.utils import get_db_connection
+
 #from flask_login import login_required, current_user
 qna_bp = Blueprint('qna', __name__,url_prefix='/qna')
 
@@ -110,9 +111,12 @@ def qna_detail_page(qna_id):
 
     if not inquiry:
         return "문의사항을 찾을 수 없습니다.", 404
+    
+    if inquiry['file'] is None:
+        inquiry['file']=""
 
     # ✅ HTML 페이지 렌더링 시 inquiry 데이터를 넘겨줌
-    return render_template('qna/qna_detail.html', inquiry=inquiry)
+    return render_template('qna/qna_detail.html', inquiry=inquiry, qna_id=qna_id)
 
 # 📌 문의사항 상세 API (JSON 반환)
 @qna_bp.route('/api/<int:qna_id>')
@@ -122,7 +126,7 @@ def qna_detail_api(qna_id):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT inquiry_id, title, content, userID, comment, status, created_at
+        SELECT inquiry_id, title, content, userID, comment, status, created_at,file
         FROM inquiries
         WHERE inquiry_id = %s
     ''', (qna_id,))
@@ -141,8 +145,6 @@ def qna_detail_api(qna_id):
     file_url = None
     if inquiry['file']:
         file_url = url_for('qna.download_file', filename=os.path.basename(inquiry['file']))  
-    if inquiry['file'] is None:
-        inquiry['file']= ""
 
     return jsonify({
         'inquiry_id': inquiry['inquiry_id'],
@@ -194,6 +196,10 @@ def qna_create_api():
         VALUES (%s, %s, %s, %s, %s, 'Pending', NOW())
     ''', (user_id, title, content, file_url, is_private))
 
+    # 필수 필드 확인
+    if not title or not content:
+        return jsonify({'error': '제목과 내용을 입력하세요.'}), 400
+
     conn.commit()
     conn.close()
 
@@ -221,14 +227,17 @@ def qna_edit_page(qna_id):
 
     return render_template('qna/qna_edit.html', inquiry=inquiry)
 
+
 # 📌 문의사항 수정 API (POST 요청)
 @qna_bp.route('/api/edit/<int:qna_id>', methods=['POST'])
 def qna_edit_api(qna_id):
     """문의사항을 수정하는 API"""
+    print(f"수정할 문의사항 ID: {qna_id}")
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # ✅ 요청 데이터 가져오기
+    # 요청 데이터 가져오기
     data = request.form
     title = data.get('title')
     content = data.get('content')
@@ -241,7 +250,6 @@ def qna_edit_api(qna_id):
     # ✅ 기존 파일 유지
     cursor.execute("SELECT file FROM inquiries WHERE inquiry_id = %s", (qna_id,))
     existing_file_data = cursor.fetchone()
-
     existing_file = existing_file_data['file'] if existing_file_data else None
 
     file = request.files.get('file')
@@ -256,11 +264,126 @@ def qna_edit_api(qna_id):
     # ✅ 기존 글 수정
     cursor.execute('''
         UPDATE inquiries
-        SET title = %s, content = %s, file = %s, is_secret = %s, updated_at = NOW()
+        SET title = %s, content = %s, file = %s, is_secret = %s
         WHERE inquiry_id = %s
     ''', (title, content, file_url, is_private, qna_id))
 
     conn.commit()
+
+    # ✅ 수정이 정상적으로 이루어졌는지 확인
+    if cursor.rowcount == 0:
+        conn.close()
+        return jsonify({'error': '문의사항 수정에 실패했습니다. 해당 ID가 존재하지 않습니다.'}), 404
+
+
     conn.close()
 
     return jsonify({'message': '문의사항이 성공적으로 수정되었습니다.', 'redirect_url': url_for('qna.qna_page')})
+
+# 📌 문의사항 삭제 API 
+@qna_bp.route('/api/delete/<int:qna_id>', methods=['DELETE'])
+def qna_delete_api(qna_id):
+    """문의사항 삭제 API"""
+    print(f"🔍 삭제 요청 받음: 문의 ID {qna_id}")  # ✅ 로그 추가
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # ✅ 먼저 해당 글이 존재하는지 확인
+    cursor.execute("SELECT * FROM inquiries WHERE inquiry_id = %s", (qna_id,))
+    inquiry = cursor.fetchone()
+
+    if not inquiry:
+        conn.close()
+        return jsonify({'error': '삭제할 게시글을 찾을 수 없습니다.'}), 404
+
+    # ✅ 문의사항 삭제
+    cursor.execute("DELETE FROM inquiries WHERE inquiry_id = %s", (qna_id,))
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        conn.close()
+        print(f"⚠️ 삭제 실패: 문의사항 {qna_id} 삭제되지 않음")  # ✅ 로그 추가
+        return jsonify({'error': '삭제 실패. 다시 시도해주세요.'}), 40
+    conn.close()
+
+    print(f"✅ 문의사항 {qna_id} 삭제 완료!")  # 디버깅용 로그 추가
+
+    return jsonify({'message': '문의사항이 성공적으로 삭제되었습니다.', 'redirect_url': url_for('qna.qna_page')})
+
+# 📌 문의사항 관리자 답변 API 
+@qna_bp.route('/api/comment/<int:qna_id>', methods=['POST'])
+def add_comment(qna_id):
+    """관리자가 문의사항에 답변을 등록하는 API"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # 요청 데이터 가져오기
+    data = request.get_json()
+    comment = data.get('comment')
+
+    if not comment:
+        return jsonify({'error': '답변을 입력하세요.'}), 400
+
+    # ✅ 해당 문의사항이 존재하는지 확인
+    cursor.execute("SELECT * FROM inquiries WHERE inquiry_id = %s", (qna_id,))
+    inquiry = cursor.fetchone()
+
+    if not inquiry:
+        conn.close()
+        return jsonify({'error': '문의사항을 찾을 수 없습니다.'}), 404
+
+    # ✅ DB에 답변 업데이트
+    cursor.execute('''
+        UPDATE inquiries
+        SET comment = %s
+        WHERE inquiry_id = %s
+    ''', (comment, qna_id))
+
+    conn.commit()
+    conn.close()
+
+    print(f"✅ 문의 {qna_id}에 대한 답변이 등록됨: {comment}")  # 로그 확인
+
+    return jsonify({'message': '답변이 성공적으로 등록되었습니다.', 'comment': comment})
+
+@qna_bp.route('/api/comment/<int:qna_id>', methods=['POST'])
+def add_comment(qna_id):
+    """관리자가 문의사항에 답변을 등록하는 API"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # ✅ 관리자라고 가정
+    is_admin = True  # ❗️ 실제 시스템에서는 세션이나 인증으로 체크해야 함
+
+    if not is_admin:
+        return jsonify({'error': '관리자 권한이 필요합니다.'}), 403
+
+    # 요청 데이터 가져오기
+    data = request.get_json()
+    comment = data.get('comment')
+
+    if not comment:
+        return jsonify({'error': '답변을 입력하세요.'}), 400
+
+    # ✅ 해당 문의사항이 존재하는지 확인
+    cursor.execute("SELECT * FROM inquiries WHERE inquiry_id = %s", (qna_id,))
+    inquiry = cursor.fetchone()
+
+    if not inquiry:
+        conn.close()
+        return jsonify({'error': '문의사항을 찾을 수 없습니다.'}), 404
+
+    # ✅ DB에 답변 업데이트
+    cursor.execute('''
+        UPDATE inquiries
+        SET comment = %s
+        WHERE inquiry_id = %s
+    ''', (comment, qna_id))
+
+    conn.commit()
+    conn.close()
+
+    print(f"✅ 문의 {qna_id}에 대한 답변이 등록됨: {comment}")  # 로그 확인
+
+    return jsonify({'message': '답변이 성공적으로 등록되었습니다.', 'comment': comment})

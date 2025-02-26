@@ -6,6 +6,15 @@ togglebtn.addEventListener('click', ()=>{
     menu.classList.toggle('active');
     member.classList.toggle('active');
 });
+
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("qnaForm");
 
